@@ -1,20 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import {StatusBar} from 'expo-status-bar';
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import {StyleSheet} from 'react-native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import Home from './screens/Home';
+import Offices from './screens/Offices';
+import {NavigationContainer} from '@react-navigation/native';
+import React from "react";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    const client = new ApolloClient({
+        uri: "https://nefolee.com/rawdata",
+        cache: new InMemoryCache()
+    })
+    const Drawer = createDrawerNavigator();
+    return (
+        <ApolloProvider client={client}>
+            <NavigationContainer>
+                <Drawer.Navigator
+                    screenOptions={{
+                        drawerStyle: {
+                            backgroundColor: "green",
+                        },
+                        headerStyle: {
+                            backgroundColor: "green"
+                        }
+                    }}>
+                    <Drawer.Screen name='Home' component={Home}/>
+                    <Drawer.Screen name='Offices' component={Offices}/>
+                </Drawer.Navigator>
+            </NavigationContainer>
+            <StatusBar/>
+        </ApolloProvider>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
